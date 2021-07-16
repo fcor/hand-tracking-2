@@ -148,7 +148,7 @@ function render() {
 
 function collideObject(indexTip) {
   for (let i = 0; i < spheres.length; i++) {
-    const spheres = spheres[i];
+    const sphere = spheres[i];
     const distance = indexTip
       .getWorldPosition(tmpVector1)
       .distanceTo(sphere.getWorldPosition(tmpVector2));
