@@ -118,6 +118,20 @@ function init() {
   hand2.add(handModelFactory.createHandModel(hand2, "mesh"));
   scene.add(hand2);
 
+  // Dummy box
+  const geometry = new THREE.BoxGeometry( SphereRadius, SphereRadius, SphereRadius );
+  const material = new THREE.MeshStandardMaterial( {
+    color: 0xff0000,
+    roughness: 1.0,
+    metalness: 0.0
+  } );
+  const spawn = new THREE.Mesh( geometry, material );
+  spawn.geometry.computeBoundingSphere();
+  spawn.position.set(0, 1.4, -0.5);
+
+  spheres.push(spawn);
+  scene.add(spawn);
+
   window.addEventListener("resize", onWindowResize);
 }
 
@@ -136,8 +150,37 @@ function render() {
   renderer.render(scene, camera);
 }
 
-function onPinchEndRight() {}
+function collideObject(indexTip) {
+  for(let i = 0; i < spheres.length; i ++) {
+    const spheres = spheres[i];
+    const distance = indexTip.getWorldPosition(tmpVector1).distanceTo(sphere.getWorldPosition(tmpVector2));
+    if(distance < sphere.geometry.boundingSphere.radius * sphere.scale.x) {
+      return sphere;
+    }
+  }
+  return null;
+}
 
-function onPinchStartRight() {}
+function onPinchEndRight(event) {
+  const controller = event.target;
+  if (controller.userData.selected !== undefined) {
+    const object = controller.userData.selected;
+    object.material.emmisive.b = 0;
+    scene.attach(object);
+    controller.userData.selected = undefined;
+    grabbing = false;
+  }
+}
+
+function onPinchStartRight(event) {
+  const controller = event.target;
+  const indexTip = controller.joints["index-finder-tip"];
+  const object = collideObject(indexTip);
+  if (object) {
+    grabbing = true;
+    indexTip.attach(object);
+    controller.userData.selected = object;
+  }
+}
 
 function onPinchStartLeft() {}
