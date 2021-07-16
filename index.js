@@ -92,8 +92,8 @@ function init() {
   scene.add(controllerGrip1);
 
   hand1 = renderer.xr.getHand(0);
-  hand1.addEventListener("pinchstart", onPinchStartLeft);
-  hand1.addEventListener("pinchend", onPinchEndLeft);
+  hand1.addEventListener("pinchstart", onPinchStart);
+  hand1.addEventListener("pinchend", onPinchEnd);
   hand1.add(handModelFactory.createHandModel(hand1, "mesh"));
   scene.add(hand1);
 
@@ -105,12 +105,12 @@ function init() {
   scene.add(controllerGrip2);
 
   hand2 = renderer.xr.getHand(1);
-  hand2.addEventListener("pinchstart", onPinchStartRight);
-  hand2.addEventListener("pinchend", onPinchEndRight);
+  hand2.addEventListener("pinchstart", onPinchStart);
+  hand2.addEventListener("pinchend", onPinchEnd);
   hand2.add(handModelFactory.createHandModel(hand2, "mesh"));
   scene.add(hand2);
 
-  // Dummy box
+  // Dummy boxes
   const geometry = new THREE.BoxGeometry(
     SphereRadius,
     SphereRadius,
@@ -121,12 +121,17 @@ function init() {
     roughness: 1.0,
     metalness: 0.0,
   });
-  const spawn = new THREE.Mesh(geometry, material);
-  spawn.geometry.computeBoundingSphere();
-  spawn.position.set(0, 1.4, -0.5);
 
-  spheres.push(spawn);
-  scene.add(spawn);
+  const box1 = new THREE.Mesh(geometry, material);
+  box1.geometry.computeBoundingSphere();
+  box1.position.set(-0.2, 1.4, -0.5);
+
+  const box2 = new THREE.Mesh(geometry, material);
+  box2.geometry.computeBoundingSphere();
+  box2.position.set(0.2, 1.4, -0.5);
+
+  spheres.push(box1, box2);
+  scene.add(box1, box2);
 
   window.addEventListener("resize", onWindowResize);
 }
@@ -159,7 +164,7 @@ function collideObject(indexTip) {
   return null;
 }
 
-function onPinchEndRight(event) {
+function onPinchEnd(event) {
   const controller = event.target;
   if (controller.userData.selected !== undefined) {
     const object = controller.userData.selected;
@@ -170,7 +175,7 @@ function onPinchEndRight(event) {
   }
 }
 
-function onPinchStartRight(event) {
+function onPinchStart(event) {
   const controller = event.target;
   const indexTip = controller.joints["index-finger-tip"];
   const object = collideObject(indexTip);
@@ -181,7 +186,3 @@ function onPinchStartRight(event) {
     console.log("Selected", object);
   }
 }
-
-function onPinchStartLeft() {}
-
-function onPinchEndLeft() {}
