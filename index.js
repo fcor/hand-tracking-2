@@ -16,12 +16,6 @@ const tmpVector2 = new THREE.Vector3();
 let controls;
 
 let grabbing = false;
-const scaling = {
-  active: false,
-  initialDistance: 0,
-  object: null,
-  initialScale: 1,
-};
 
 const spheres = [];
 const SphereRadius = 0.05;
@@ -99,9 +93,7 @@ function init() {
 
   hand1 = renderer.xr.getHand(0);
   hand1.addEventListener("pinchstart", onPinchStartLeft);
-  hand1.addEventListener("pinchend", () => {
-    scaling.active = false;
-  });
+  hand1.addEventListener("pinchend", onPinchEndLeft);
   hand1.add(handModelFactory.createHandModel(hand1, "mesh"));
   scene.add(hand1);
 
@@ -174,7 +166,7 @@ function onPinchEndRight(event) {
 
 function onPinchStartRight(event) {
   const controller = event.target;
-  const indexTip = controller.joints["index-finder-tip"];
+  const indexTip = controller.joints["index-finger-tip"];
   const object = collideObject(indexTip);
   if (object) {
     grabbing = true;
@@ -184,3 +176,5 @@ function onPinchStartRight(event) {
 }
 
 function onPinchStartLeft() {}
+
+function onPinchEndLeft() {}
