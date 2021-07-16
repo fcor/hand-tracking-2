@@ -107,7 +107,7 @@ function init() {
   hand2 = renderer.xr.getHand(1);
   hand2.addEventListener("pinchstart", onPinchStartRight);
   hand2.addEventListener("pinchend", onPinchEndRight);
-  hand2.add(handModelFactory.createHandModel(hand2, "spheres"));
+  hand2.add(handModelFactory.createHandModel(hand2, "mesh"));
   scene.add(hand2);
 
   // Dummy box
