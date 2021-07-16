@@ -18,7 +18,7 @@ let controls;
 let grabbing = false;
 
 const spheres = [];
-const SphereRadius = 0.05;
+const sphereRadius = 0.05;
 
 init();
 animate();
@@ -112,9 +112,9 @@ function init() {
 
   // Dummy boxes
   const geometry = new THREE.BoxGeometry(
-    SphereRadius,
-    SphereRadius,
-    SphereRadius
+    sphereRadius,
+    sphereRadius,
+    sphereRadius
   );
   const material = new THREE.MeshStandardMaterial({
     color: 0xff0000,
