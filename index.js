@@ -111,13 +111,17 @@ function init() {
   scene.add(hand2);
 
   // Dummy box
-  const geometry = new THREE.BoxGeometry( SphereRadius, SphereRadius, SphereRadius );
-  const material = new THREE.MeshStandardMaterial( {
+  const geometry = new THREE.BoxGeometry(
+    SphereRadius,
+    SphereRadius,
+    SphereRadius
+  );
+  const material = new THREE.MeshStandardMaterial({
     color: 0xff0000,
     roughness: 1.0,
-    metalness: 0.0
-  } );
-  const spawn = new THREE.Mesh( geometry, material );
+    metalness: 0.0,
+  });
+  const spawn = new THREE.Mesh(geometry, material);
   spawn.geometry.computeBoundingSphere();
   spawn.position.set(0, 1.4, -0.5);
 
@@ -143,10 +147,12 @@ function render() {
 }
 
 function collideObject(indexTip) {
-  for(let i = 0; i < spheres.length; i ++) {
+  for (let i = 0; i < spheres.length; i++) {
     const spheres = spheres[i];
-    const distance = indexTip.getWorldPosition(tmpVector1).distanceTo(sphere.getWorldPosition(tmpVector2));
-    if(distance < sphere.geometry.boundingSphere.radius * sphere.scale.x) {
+    const distance = indexTip
+      .getWorldPosition(tmpVector1)
+      .distanceTo(sphere.getWorldPosition(tmpVector2));
+    if (distance < sphere.geometry.boundingSphere.radius * sphere.scale.x) {
       return sphere;
     }
   }
@@ -157,7 +163,7 @@ function onPinchEndRight(event) {
   const controller = event.target;
   if (controller.userData.selected !== undefined) {
     const object = controller.userData.selected;
-    object.material.emmisive.b = 0;
+    object.material.emissive.b = 0;
     scene.attach(object);
     controller.userData.selected = undefined;
     grabbing = false;
@@ -172,6 +178,7 @@ function onPinchStartRight(event) {
     grabbing = true;
     indexTip.attach(object);
     controller.userData.selected = object;
+    console.log("Selected", object);
   }
 }
 
