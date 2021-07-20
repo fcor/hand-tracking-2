@@ -4,6 +4,7 @@ import { OrbitControls } from "./libs/OrbitControls.js";
 import { VRButton } from "./webxr/VRButton.js";
 import { XRControllerModelFactory } from "./webxr/XRControllerModelFactory.js";
 import { XRHandModelFactory } from "./webxr/XRHandModelFactory.js";
+import cannonDebugger from "./libs/cannon-es-debugger.js";
 
 let container;
 let camera, scene, renderer, world;
@@ -40,6 +41,8 @@ function init() {
 
   scene = new THREE.Scene();
   scene.background = new THREE.Color(0x444444);
+
+  cannonDebugger(scene, world.bodies)
 
   camera = new THREE.PerspectiveCamera(
     50,
