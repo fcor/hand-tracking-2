@@ -42,7 +42,7 @@ function init() {
   scene = new THREE.Scene();
   scene.background = new THREE.Color(0x444444);
 
-  cannonDebugger(scene, world.bodies)
+  cannonDebugger(scene, world.bodies, { autoUpdate: true })
 
   camera = new THREE.PerspectiveCamera(
     50,
