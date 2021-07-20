@@ -27,7 +27,7 @@ const sphereRadius = 0.05;
 
 const bodies = [];
 const meshes = [];
-let grabbedMesh;
+let grabbedMesh, grabbedBody;
 
 init();
 animate();
@@ -169,8 +169,12 @@ function init() {
   world.addBody(box2Body);
 
   spheres.push(box1, box2);
-  meshes.push(box1, box2);
-  bodies.push(box1Body, box2Body);
+  grabbedMesh = box1;
+  // meshes.push(box1, box2);
+  meshes.push(box2);
+  // bodies.push(box1Body, box2Body);
+  grabbedBody = box1Body;
+  bodies.push(box2Body);
   scene.add(box1, box2);
 
   const distConstraint = new CANNON.DistanceConstraint(box1Body, box2Body);
@@ -237,12 +241,18 @@ function onPinchStart(event) {
 
 function updateMeshPositions() {
   for (let i = 0; i !== meshes.length; i++) {
-    if (meshes[i] === grabbedMesh) {
-      bodies[i].position.copy(meshes[i].position);
-      bodies[i].quaternion.copy(meshes[i].quaternion);
-    } else {
-      meshes[i].position.copy(bodies[i].position);
-      meshes[i].quaternion.copy(bodies[i].quaternion);
-    }
+    meshes[i].position.copy(bodies[i].position);
+    meshes[i].quaternion.copy(bodies[i].quaternion);
+
+    // if (meshes[i] === grabbedMesh) {
+    //   bodies[i].position.copy(meshes[i].position);
+    //   bodies[i].quaternion.copy(meshes[i].quaternion);
+    // } else {
+    //   meshes[i].position.copy(bodies[i].position);
+    //   meshes[i].quaternion.copy(bodies[i].quaternion);
+    // }
   }
+
+  grabbedBody.position.copy(grabbedMesh.position)
+  grabbedBody.quaternion.copy(grabbedMesh.quaternion)
 }
