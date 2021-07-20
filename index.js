@@ -11,6 +11,7 @@ let camera, scene, renderer, world;
 let hand1, hand2;
 let controller1, controller2;
 let controllerGrip1, controllerGrip2;
+let myDebugger;
 
 const timestep = 1 / 60;
 
@@ -42,7 +43,7 @@ function init() {
   scene = new THREE.Scene();
   scene.background = new THREE.Color(0x444444);
 
-  cannonDebugger(scene, world.bodies, { autoUpdate: true })
+  myDebugger = cannonDebugger(scene, world.bodies, { autoUpdate: false });
 
   camera = new THREE.PerspectiveCamera(
     50,
@@ -145,7 +146,11 @@ function init() {
     metalness: 0.0,
   });
 
-  const halfExtents = new CANNON.Vec3(sphereRadius, sphereRadius, sphereRadius);
+  const halfExtents = new CANNON.Vec3(
+    sphereRadius / 2,
+    sphereRadius / 2,
+    sphereRadius / 2
+  );
 
   const boxShape = new CANNON.Box(halfExtents);
 
@@ -186,6 +191,7 @@ function animate() {
 }
 
 function render() {
+  myDebugger.update();
   renderer.render(scene, camera);
   world.step(timestep);
   updateMeshPositions();
@@ -231,7 +237,7 @@ function onPinchStart(event) {
 
 function updateMeshPositions() {
   for (let i = 0; i !== meshes.length; i++) {
-    if(meshes[i] === grabbedMesh) {
+    if (meshes[i] === grabbedMesh) {
       bodies[i].position.copy(meshes[i].position);
       bodies[i].quaternion.copy(meshes[i].quaternion);
     } else {
