@@ -221,7 +221,7 @@ function onPinchEnd(event) {
     object.material.emissive.b = 0;
     scene.attach(object);
     controller.userData.selected = undefined;
-    grabbedMesh = undefined;
+    // grabbedMesh = undefined;
     grabbing = false;
   }
 }
@@ -234,7 +234,7 @@ function onPinchStart(event) {
     grabbing = true;
     indexTip.attach(object);
     controller.userData.selected = object;
-    grabbedMesh = object;
+    // grabbedMesh = object;
     console.log("Selected", object);
   }
 }
