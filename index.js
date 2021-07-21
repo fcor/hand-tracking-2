@@ -40,7 +40,7 @@ function init() {
   document.body.appendChild(container);
 
   world = new CANNON.World({
-    gravity: new CANNON.Vec3(0, -9.82, 0), // m/s²
+    gravity: new CANNON.Vec3(0, 0, 0), // m/s²
   });
 
   scene = new THREE.Scene();
@@ -162,7 +162,7 @@ function init() {
   box1.geometry.computeBoundingSphere();
   box1.position.set(-0.2, 1.4, -0.5);
   box1.castShadow = true;
-  const box1Body = new CANNON.Body({ mass: 0, shape: boxShape });
+  const box1Body = new CANNON.Body({ mass: 5, shape: boxShape });
   box1Body.position.set(-0.2, 1.4, -0.5);
   world.addBody(box1Body);
 
@@ -182,10 +182,10 @@ function init() {
   scene.add(connector);
 
   spheres.push(box1, box2);
-  grabbedMesh = box1;
-  // meshes.push(box1, box2);
-  meshes.push(box2);
-  // bodies.push(box1Body, box2Body);
+  // grabbedMesh = box1;
+  meshes.push(box1, box2);
+  // meshes.push(box2);
+  bodies.push(box1Body, box2Body);
   grabbedBody = box1Body;
   bodies.push(box2Body);
   scene.add(box1, box2);
@@ -234,7 +234,7 @@ function onPinchEnd(event) {
     object.material.emissive.b = 0;
     scene.attach(object);
     controller.userData.selected = undefined;
-    // grabbedMesh = undefined;
+    grabbedMesh = undefined;
     grabbing = false;
   }
 }
@@ -247,30 +247,32 @@ function onPinchStart(event) {
     grabbing = true;
     indexTip.attach(object);
     controller.userData.selected = object;
-    // grabbedMesh = object;
+    grabbedMesh = object;
     console.log("Selected", object);
   }
 }
 
 function updateMeshPositions() {
   for (let i = 0; i !== meshes.length; i++) {
-    meshes[i].position.copy(bodies[i].position);
-    meshes[i].quaternion.copy(bodies[i].quaternion);
+    // meshes[i].position.copy(bodies[i].position);
+    // meshes[i].quaternion.copy(bodies[i].quaternion);
 
-    // if (meshes[i] === grabbedMesh) {
-    //   bodies[i].position.copy(meshes[i].position);
-    //   bodies[i].quaternion.copy(meshes[i].quaternion);
-    // } else {
-    //   meshes[i].position.copy(bodies[i].position);
-    //   meshes[i].quaternion.copy(bodies[i].quaternion);
-    // }
+    if (meshes[i] === grabbedMesh) {
+      bodies[i].getWorldPosition(tmpVector1);
+      bodies[i].getWorldQuaternion(tmpQuatertnion);
+      bodies[i].position.copy(tmpVector1);
+      bodies[i].quaternion.copy(tmpQuatertnion);
+    } else {
+      meshes[i].position.copy(bodies[i].position);
+      meshes[i].quaternion.copy(bodies[i].quaternion);
+    }
   }
 
-  grabbedMesh.getWorldPosition(tmpVector1);
-  grabbedMesh.getWorldQuaternion(tmpQuatertnion);
+  // grabbedMesh.getWorldPosition(tmpVector1);
+  // grabbedMesh.getWorldQuaternion(tmpQuatertnion);
 
-  grabbedBody.position.copy(tmpVector1);
-  grabbedBody.quaternion.copy(tmpQuatertnion);
+  // grabbedBody.position.copy(tmpVector1);
+  // grabbedBody.quaternion.copy(tmpQuatertnion);
 
   for (let index = 1; index <= 10; index++) {
     var p0 = new THREE.Vector3();
