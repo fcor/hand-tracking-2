@@ -17,9 +17,11 @@ const timestep = 1 / 60;
 
 const tmpVector1 = new THREE.Vector3();
 const tmpVector2 = new THREE.Vector3();
-const tmpQuatertnion =  new THREE.Quaternion();
+const tmpQuatertnion = new THREE.Quaternion();
+var dummy = new THREE.Object3D();
 
 let controls;
+let box1, box2, connector;
 
 let grabbing = false;
 
@@ -44,7 +46,7 @@ function init() {
   scene = new THREE.Scene();
   scene.background = new THREE.Color(0x444444);
 
-  myDebugger = cannonDebugger(scene, world.bodies, { autoUpdate: false });
+  // myDebugger = cannonDebugger(scene, world.bodies, { autoUpdate: false });
 
   camera = new THREE.PerspectiveCamera(
     50,
@@ -155,19 +157,25 @@ function init() {
 
   const boxShape = new CANNON.Box(halfExtents);
 
-  const box1 = new THREE.Mesh(geometry, material);
+  box1 = new THREE.Mesh(geometry, material);
   box1.geometry.computeBoundingSphere();
   box1.position.set(-0.2, 1.4, -0.5);
   const box1Body = new CANNON.Body({ mass: 0, shape: boxShape });
   box1Body.position.set(-0.2, 1.4, -0.5);
   world.addBody(box1Body);
 
-  const box2 = new THREE.Mesh(geometry, material);
+  box2 = new THREE.Mesh(geometry, material);
   box2.geometry.computeBoundingSphere();
   box2.position.set(0.2, 1.4, -0.5);
   const box2Body = new CANNON.Body({ mass: 1, shape: boxShape });
   box2Body.position.set(0.2, 1.4, -0.5);
   world.addBody(box2Body);
+
+  const sphereGeometry = new THREE.SphereBufferGeometry(0.01, 32, 16);
+  const sphereMaterial = new THREE.MeshLambertMaterial({ color: "yellow" });
+  connector = new THREE.InstancedMesh(sphereGeometry, sphereMaterial, 10);
+  connector.instanceMatrix.setUsage(THREE.DynamicDrawUsage); // will be updated every frame
+  scene.add(connector);
 
   spheres.push(box1, box2);
   grabbedMesh = box1;
@@ -196,7 +204,7 @@ function animate() {
 }
 
 function render() {
-  myDebugger.update();
+  // myDebugger.update();
   renderer.render(scene, camera);
   world.step(timestep);
   updateMeshPositions();
@@ -253,10 +261,25 @@ function updateMeshPositions() {
     //   meshes[i].quaternion.copy(bodies[i].quaternion);
     // }
   }
-  
+
   grabbedMesh.getWorldPosition(tmpVector1);
   grabbedMesh.getWorldQuaternion(tmpQuatertnion);
 
   grabbedBody.position.copy(tmpVector1);
   grabbedBody.quaternion.copy(tmpQuatertnion);
+
+  for (let index = 1; index <= 10; index++) {
+    var p0 = new THREE.Vector3();
+    var p1 = new THREE.Vector3();
+    var pf = new THREE.Vector3();
+
+    p0.setFromMatrixPosition(box1.matrixWorld);
+    p1.setFromMatrixPosition(box2.matrixWorld);
+    pf.lerpVectors(p0, p1, index / 10);
+
+    dummy.position.copy(pf);
+    dummy.updateMatrix();
+    connector.setMatrixAt(index, dummy.matrix);
+  }
+  connector.instanceMatrix.needsUpdate = true;
 }
