@@ -258,8 +258,8 @@ function updateMeshPositions() {
     // meshes[i].quaternion.copy(bodies[i].quaternion);
 
     if (meshes[i] === grabbedMesh) {
-      bodies[i].getWorldPosition(tmpVector1);
-      bodies[i].getWorldQuaternion(tmpQuatertnion);
+      meshes[i].getWorldPosition(tmpVector1);
+      meshes[i].getWorldQuaternion(tmpQuatertnion);
       bodies[i].position.copy(tmpVector1);
       bodies[i].quaternion.copy(tmpQuatertnion);
     } else {
