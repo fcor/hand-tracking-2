@@ -17,6 +17,7 @@ const timestep = 1 / 60;
 
 const tmpVector1 = new THREE.Vector3();
 const tmpVector2 = new THREE.Vector3();
+const tmpQuatertnion =  new THREE.Quaternion();
 
 let controls;
 
@@ -252,7 +253,10 @@ function updateMeshPositions() {
     //   meshes[i].quaternion.copy(bodies[i].quaternion);
     // }
   }
+  
+  grabbedMesh.getWorldPosition(tmpVector1);
+  grabbedMesh.getWorldQuaternion(tmpQuatertnion);
 
-  grabbedBody.position.copy(grabbedMesh.position)
-  grabbedBody.quaternion.copy(grabbedMesh.quaternion)
+  grabbedBody.position.copy(tmpVector1);
+  grabbedBody.quaternion.copy(tmpQuatertnion);
 }
