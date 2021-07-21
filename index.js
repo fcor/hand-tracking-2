@@ -171,7 +171,7 @@ function init() {
   box2.position.set(-0.2, 1, -0.5);
   box2.scale.multiplyScalar(3);
   box2.castShadow = true;
-  const box2Body = new CANNON.Body({ mass: 10, shape: boxShape2 });
+  const box2Body = new CANNON.Body({ mass: 15, shape: boxShape2 });
   box2Body.position.set(-0.2, 1, -0.5);
   world.addBody(box2Body);
 
