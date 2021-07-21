@@ -256,6 +256,9 @@ function updateMeshPositions() {
   for (let i = 0; i !== meshes.length; i++) {
     // meshes[i].position.copy(bodies[i].position);
     // meshes[i].quaternion.copy(bodies[i].quaternion);
+    bodies[i].velocity.x = bodies[i].velocity.x / 1.05;
+    bodies[i].velocity.y = bodies[i].velocity.y / 1.05;
+    bodies[i].velocity.z = bodies[i].velocity.z / 1.05;
 
     if (meshes[i] === grabbedMesh) {
       meshes[i].getWorldPosition(tmpVector1);
