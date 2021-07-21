@@ -166,9 +166,10 @@ function init() {
 
   box2 = new THREE.Mesh(geometry, material);
   box2.geometry.computeBoundingSphere();
-  box2.position.set(0.2, 1.4, -0.5);
-  const box2Body = new CANNON.Body({ mass: 1, shape: boxShape });
-  box2Body.position.set(0.2, 1.4, -0.5);
+  box2.position.set(-0.2, 1, -0.5);
+  box2.scale.multiplyScalar(3);
+  const box2Body = new CANNON.Body({ mass: 3, shape: boxShape });
+  box2Body.position.set(-0.2, 1, -0.5);
   world.addBody(box2Body);
 
   const sphereGeometry = new THREE.SphereBufferGeometry(0.01, 32, 16);
