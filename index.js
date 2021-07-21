@@ -161,6 +161,7 @@ function init() {
   box1 = new THREE.Mesh(geometry, material);
   box1.geometry.computeBoundingSphere();
   box1.position.set(-0.2, 1.4, -0.5);
+  box1.castShadow = true;
   const box1Body = new CANNON.Body({ mass: 0, shape: boxShape });
   box1Body.position.set(-0.2, 1.4, -0.5);
   world.addBody(box1Body);
@@ -169,7 +170,8 @@ function init() {
   box2.geometry.computeBoundingSphere();
   box2.position.set(-0.2, 1, -0.5);
   box2.scale.multiplyScalar(3);
-  const box2Body = new CANNON.Body({ mass: 5, shape: boxShape2 });
+  box2.castShadow = true;
+  const box2Body = new CANNON.Body({ mass: 10, shape: boxShape2 });
   box2Body.position.set(-0.2, 1, -0.5);
   world.addBody(box2Body);
 
